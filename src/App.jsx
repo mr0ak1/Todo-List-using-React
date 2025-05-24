@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import Addtodo from "./components/AddTodo";
+import Container from "./components/Container";
+import DisplayItem from "./components/DisplayItems";
+import Heading from "./components/Heading";
+import Errorview from "./components/Error";
 
 function App() {
-  const [count, setCount] = useState(0)
+  let items = [
+    {
+      toDoWork: "Buy Milk",
+      dueDate: "05/2/2025",
+    },
+    {
+      toDoWork: "Go To College",
+      dueDate: "05/2/2025",
+    },
+  ];
 
+  let [todoData, todoUpdate] = useState(items);
+  const handleNewItem = (itemName, itemDueDate) => {
+    console.log(`${itemName} ${itemDueDate}`);
+    const itemsAdded = {
+      toDoWork: itemName,
+      dueDate: itemDueDate,
+    };
+
+    todoUpdate([...todoData, itemsAdded]);
+  };
+
+  let handleDeleteItem = (indexToDelete) => {
+    const updateItems = todoData.filter((_, index) => index !== indexToDelete);
+    todoUpdate(updateItems);
+  };
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Container>
+      <Heading />
+
+      <Addtodo onNewItem={handleNewItem} />
+      <Errorview todoData={todoData} />
+      <DisplayItem todoItems={todoData} onDeleteItems={handleDeleteItem} />
+    </Container>
+  );
 }
 
-export default App
+export default App;
